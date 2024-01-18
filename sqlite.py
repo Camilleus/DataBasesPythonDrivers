@@ -1,3 +1,5 @@
+# pip install sqlite3
+
 import sqlite3 
  
 # Create a connection to the database 
