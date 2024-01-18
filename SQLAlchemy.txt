@@ -1,0 +1,84 @@
+Kiedy chcesz się połączyć z bazą danych poprzez SQLAlchemy:
+
+SQLAlchemy to popularna biblioteka w języku Python do obsługi baz danych. 
+Pozwala ona programistom na interakcję z bazami danych, używając języka Python, zamiast pisać czysty SQL. 
+
+
+
+Instalacja SQLAlchemy:
+Upewnij się, że masz zainstalowaną bibliotekę SQLAlchemy. Możesz to zrobić za pomocą narzędzia pip:
+
+bash
+pip install sqlalchemy
+
+
+
+Wybór i instalacja silnika bazodanowego:
+SQLAlchemy współpracuje z różnymi silnikami baz danych, takimi jak SQLite, PostgreSQL, MySQL itp. Wybierz silnik, który będzie odpowiadał Twoim potrzebom i zainstaluj odpowiednią bibliotekę do obsługi tego silnika. Na przykład, dla SQLite:
+
+bash
+pip install sqlalchemy[sqlite]
+
+
+
+Tworzenie połączenia:
+Skonfiguruj połączenie do swojej bazy danych. Przykład dla SQLite:
+
+python
+from sqlalchemy import create_engine
+
+# 'sqlite:///example.db' to przykładowa ścieżka do pliku bazy SQLite
+engine = create_engine('sqlite:///example.db', echo=True)
+
+
+
+Definiowanie modeli:
+Stwórz klasy modeli, które będą mapowane na tabele w bazie danych. Przykład dla tabeli użytkowników:
+
+python
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    age = Column(Integer)
+
+
+
+Tworzenie schemy bazy danych:
+Utwórz schemę bazy danych na podstawie zdefiniowanych modeli:
+
+python
+Base.metadata.create_all(engine)
+
+
+
+Tworzenie sesji:
+Stwórz sesję, która umożliwi interakcję z bazą danych:
+
+python
+from sqlalchemy.orm import sessionmaker
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+
+
+Operacje na bazie danych:
+Korzystaj z sesji do dodawania, aktualizacji, usuwania i pobierania danych z bazy:
+
+python
+# Dodawanie nowego użytkownika
+new_user = User(name='John Doe', age=30)
+session.add(new_user)
+session.commit()
+
+# Pobieranie użytkowników
+users = session.query(User).all()
+for user in users:
+    print(user.name, user.age)
